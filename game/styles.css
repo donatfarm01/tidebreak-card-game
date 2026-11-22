@@ -1,0 +1,258 @@
+/* styles.css — Tidebreak's look: deep teal sea against ember light.
+   One file, no web fonts, no images: every visual is CSS or inline SVG. */
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #eaf6f3;
+  background:
+    radial-gradient(1100px 480px at 82% -12%, rgba(255, 122, 26, 0.28), rgba(255, 122, 26, 0) 62%),
+    radial-gradient(900px 500px at 8% 108%, rgba(43, 179, 216, 0.22), rgba(43, 179, 216, 0) 60%),
+    linear-gradient(180deg, #0b3d47 0%, #062a33 55%, #041e25 100%);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#app { height: 100vh; display: flex; flex-direction: column; }
+
+/* ---- top bar ---- */
+.topbar {
+  height: 58px; flex: 0 0 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(3, 22, 28, 0.45);
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-icon { width: 30px; height: 30px; color: #ffb347; }
+.brand-name {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px; letter-spacing: 6px; font-weight: 700; color: #ffd9a0;
+}
+.round-badge {
+  font-size: 15px; font-weight: 700; letter-spacing: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 7px 16px; border-radius: 999px;
+}
+.top-actions { display: flex; gap: 10px; }
+.top-actions button {
+  font: inherit; font-size: 13px; font-weight: 700; letter-spacing: 1px;
+  color: #eaf6f3; background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 8px 14px; border-radius: 999px; cursor: pointer;
+}
+.top-actions button:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* ---- table ---- */
+.table { flex: 1; display: flex; flex-direction: column; padding: 8px 26px 4px; min-height: 0; }
+.opponent-row, .player-row { display: flex; align-items: center; gap: 26px; }
+.opponent-row { flex: 0 0 128px; }
+.player-row { flex: 0 0 244px; }
+.center-row { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 0; }
+
+.keeper { display: flex; align-items: center; gap: 12px; min-width: 300px; }
+.avatar {
+  width: 58px; height: 58px; flex: 0 0 58px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+}
+.avatar svg { width: 36px; height: 36px; }
+.avatar-you { background: radial-gradient(circle at 35% 30%, #ff9a3d, #c24e00); color: #fff3e0; }
+.avatar-foe { background: radial-gradient(circle at 35% 30%, #5d7d90, #2c4250); color: #d7e6ec; }
+.keeper-name { font-size: 19px; font-weight: 800; letter-spacing: 1px; }
+.keeper-title { font-size: 12px; font-weight: 400; color: #9fc6bf; letter-spacing: 0; margin-left: 6px; }
+
+/* life bar: a filled bar plus a big "16 / 20" number */
+.life { display: flex; align-items: center; gap: 10px; margin-top: 7px; }
+.life-bar { width: 170px; height: 16px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); overflow: hidden; }
+.life-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #ffb347, #ff7a1a); transition: width 0.35s ease; }
+.opponent .life-fill { background: linear-gradient(90deg, #7fb6c6, #2bb3d8); }
+.life-fill.life-low { background: linear-gradient(90deg, #ff5a4d, #c81e1e); animation: lowpulse 0.9s ease-in-out infinite alternate; }
+.life-text { font-size: 20px; font-weight: 800; white-space: nowrap; }
+@keyframes lowpulse { from { opacity: 1; } to { opacity: 0.55; } }
+
+/* ---- hands ---- */
+.hand { display: flex; gap: 14px; align-items: center; }
+.opponent-hand { margin-left: auto; }
+.player-hand { flex: 1; justify-content: center; }
+.hint { font-size: 13px; color: #9fc6bf; text-align: center; }
+
+/* ---- cards ---- */
+.card {
+  --el: #2bb3d8; --el-dark: #0e6e8c;
+  width: 132px; height: 186px; flex: 0 0 auto;
+  border-radius: 12px; position: relative;
+  background: linear-gradient(180deg, #fffdf4 0%, #f3ecda 100%);
+  color: #12262b;
+  border: 3px solid var(--el);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  padding: 8px 10px;
+  display: flex; flex-direction: column; align-items: center;
+  user-select: none;
+}
+.card-small { width: 104px; height: 148px; padding: 6px 8px; }
+/* The opponent's hand is face-down and smaller, so it never crowds the
+   tide meter below it. */
+.card-mini { width: 84px; height: 118px; padding: 6px 8px; }
+.card-mini .card-back-icon { width: 34px; height: 34px; }
+.card-mini .card-back-word { font-size: 9px; }
+.card-small .card-value { font-size: 44px; }
+.card-small .card-icon { width: 26px; height: 26px; }
+.card-small .card-effect { font-size: 10px; }
+
+.card-top { display: flex; align-items: center; gap: 6px; align-self: stretch; }
+.card-icon { width: 30px; height: 30px; color: var(--el-dark); }
+.card-element { font-size: 13px; font-weight: 800; letter-spacing: 1px; color: var(--el-dark); }
+.card-value {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 62px; font-weight: 700; line-height: 1; margin: auto 0;
+  color: var(--el-dark);
+}
+.card-effect { font-size: 11px; line-height: 1.35; text-align: center; color: #4a5a58; min-height: 30px; }
+.card-special {
+  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+  background: var(--el-dark); color: #fff;
+  font-size: 10px; font-weight: 800; letter-spacing: 1px;
+  padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+}
+.card-playable { cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.card-playable:hover, .card-playable:focus-visible {
+  transform: translateY(-12px);
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.55);
+  outline: 3px solid #ffd9a0; outline-offset: 2px;
+}
+.card-doubled { box-shadow: 0 0 0 3px #ffd23e, 0 6px 16px rgba(0, 0, 0, 0.45); }
+.card-doubled::after {
+  content: "×2 TIDE";
+  position: absolute; bottom: -11px; left: 50%; transform: translateX(-50%);
+  background: #ffd23e; color: #3a2a00;
+  font-size: 10px; font-weight: 800; letter-spacing: 1px;
+  padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+}
+.card-back {
+  background: linear-gradient(160deg, #12707f, #083845);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #bfe8e2; justify-content: center; gap: 6px;
+}
+.card-back-icon { width: 44px; height: 44px; }
+.card-back-word { font-size: 10px; font-weight: 800; letter-spacing: 3px; }
+.trick-winner { box-shadow: 0 0 0 4px #ffd23e, 0 0 22px rgba(255, 210, 62, 0.65); }
+
+/* ---- tide meter ---- */
+.tide {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(2, 18, 23, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px; padding: 8px 14px;
+}
+.tide-label { font-size: 13px; font-weight: 800; letter-spacing: 3px; color: #9fc6bf; }
+.tide-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  width: 88px; padding: 6px 4px; border-radius: 10px;
+  color: rgba(234, 246, 243, 0.45);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.tide-icon { width: 26px; height: 26px; }
+.tide-name { font-size: 11px; font-weight: 800; letter-spacing: 1px; }
+.tide-times { font-size: 13px; font-weight: 800; color: #ffd23e; }
+.tide-current {
+  background: var(--el); color: #06222a;
+  transform: scale(1.1);
+  box-shadow: 0 0 18px var(--el);
+}
+.tide-current .tide-times { color: #06222a; }
+.tide-next { font-size: 13px; font-weight: 700; color: #ffd9a0; white-space: nowrap; }
+
+/* ---- played cards + banner ---- */
+.played { display: flex; align-items: flex-start; gap: 22px; }
+.played-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 118px; }
+.played-empty {
+  width: 104px; height: 148px; border-radius: 12px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: rgba(234, 246, 243, 0.6); text-align: center; padding: 8px;
+}
+.vs {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 30px; font-weight: 700; color: #ffd9a0;
+  margin-top: 52px;
+}
+.played-total { font-size: 14px; font-weight: 800; color: #eaf6f3; }
+.banner {
+  font-size: 16px; font-weight: 700; text-align: center;
+  padding: 8px 20px; border-radius: 999px;
+  background: rgba(2, 18, 23, 0.6);
+  max-width: 760px;
+}
+.banner-win { background: linear-gradient(90deg, #ff7a1a, #ff9a3d); color: #fff; }
+.banner-lose { background: linear-gradient(90deg, #8c2f2f, #b04a4a); color: #fff; }
+.banner-tie { background: rgba(255, 255, 255, 0.16); }
+
+/* ---- log ---- */
+.logbar {
+  flex: 0 0 56px; border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(3, 22, 28, 0.45);
+  padding: 6px 26px; font-size: 13px; line-height: 1.45; color: #b9d8d2;
+  overflow: hidden;
+}
+.log-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.log-line:last-child { color: #eaf6f3; font-weight: 600; }
+
+/* ---- overlays: title + end ---- */
+.overlay {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(3, 20, 26, 0.94);
+  padding: 24px;
+}
+.hidden { display: none !important; }
+
+.title-box { text-align: center; max-width: 660px; }
+.title-icon { width: 74px; height: 74px; color: #ffb347; animation: bob 2.6s ease-in-out infinite alternate; }
+@keyframes bob { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+.title-name {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 78px; letter-spacing: 14px; margin: 6px 0 2px;
+  color: #ffd9a0; text-shadow: 0 0 34px rgba(255, 122, 26, 0.55);
+}
+.title-sub { font-size: 19px; color: #cfe6e0; margin: 4px 0 20px; }
+.title-rules { text-align: left; margin: 0 auto 22px; max-width: 560px; }
+.rule {
+  background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px; padding: 10px 14px; margin: 7px 0; font-size: 15px; line-height: 1.45;
+}
+.rule-num {
+  display: inline-flex; width: 24px; height: 24px; border-radius: 50%;
+  background: #ff7a1a; color: #fff; font-size: 13px; font-weight: 800;
+  align-items: center; justify-content: center; margin-right: 8px;
+}
+.big-button {
+  font: inherit; font-size: 22px; font-weight: 800; letter-spacing: 1px;
+  color: #fff; background: linear-gradient(180deg, #ff8f2b, #ff5e00);
+  border: none; border-radius: 999px; padding: 15px 38px; cursor: pointer;
+  box-shadow: 0 8px 24px rgba(255, 94, 0, 0.45);
+}
+.big-button:hover { filter: brightness(1.1); }
+.title-foot { font-size: 13px; color: #9fc6bf; margin-top: 16px; }
+
+.end-box { text-align: center; max-width: 620px; padding: 34px 44px; border-radius: 20px; background: rgba(5, 30, 38, 0.96); border: 2px solid rgba(255, 255, 255, 0.18); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5); }
+.end-win { border-color: #ffd23e; box-shadow: 0 0 60px rgba(255, 210, 62, 0.25), 0 18px 50px rgba(0, 0, 0, 0.5); }
+.end-lose { border-color: #8fa8b8; box-shadow: 0 0 40px rgba(143, 168, 184, 0.22), 0 18px 50px rgba(0, 0, 0, 0.5); }
+.end-kicker { font-size: 15px; font-weight: 800; letter-spacing: 5px; color: #ffd9a0; }
+.end-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 64px; margin: 8px 0 4px; color: #fff;
+}
+.end-sub { font-size: 17px; color: #cfe6e0; margin: 4px 0 20px; }
+.end-score { display: flex; gap: 14px; justify-content: center; margin-bottom: 12px; }
+.end-score-cell {
+  font-size: 18px; font-weight: 800; padding: 10px 20px; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.end-stats { font-size: 14px; color: #9fc6bf; margin-bottom: 22px; }
+
+/* ---- deterministic screenshots: no motion in shot mode ---- */
+body.shot-mode * { animation: none !important; transition: none !important; }

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidebreak — a duel of lighthouse keepers</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Element icons, drawn once here and reused by every card and by the
+     tide meter. Colour and shape carry each element, never text alone. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="icon-wave" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round">
+        <path d="M6 20 Q13 12 20 20 T34 20 T48 20 T58 20"/>
+        <path d="M6 34 Q13 26 20 34 T34 34 T48 34 T58 34"/>
+        <path d="M6 48 Q13 40 20 48 T34 48 T48 48 T58 48"/>
+      </g>
+    </symbol>
+    <symbol id="icon-wind" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round">
+        <path d="M8 18 H40 Q50 18 50 26 Q50 34 40 34 H30"/>
+        <path d="M8 32 H52 Q58 32 58 38 Q58 44 50 44 H44"/>
+        <path d="M8 46 H34 Q42 46 42 52 Q42 56 36 56 H30"/>
+      </g>
+    </symbol>
+    <symbol id="icon-ember" viewBox="0 0 64 64">
+      <path fill="currentColor" d="M32 4 C36 14 52 22 52 38 A20 20 0 1 1 12 38 C12 30 18 25 22 18 C24 23 26 25 28 27 C28 18 30 10 32 4 Z"/>
+    </symbol>
+    <symbol id="icon-stone" viewBox="0 0 64 64">
+      <path fill="currentColor" d="M4 54 L22 14 L32 34 L40 20 L60 54 Z"/>
+      <path fill="currentColor" opacity="0.55" d="M22 14 L32 34 L26 54 L12 54 Z"/>
+    </symbol>
+    <symbol id="icon-lighthouse" viewBox="0 0 64 64">
+      <g fill="currentColor">
+        <path d="M26 8 h12 v8 h-12 Z"/>
+        <path d="M28 16 h8 l3 34 h-14 Z"/>
+        <path d="M22 50 h20 v5 h-20 Z"/>
+        <path d="M18 58 h28 v3 h-28 Z"/>
+      </g>
+      <g fill="currentColor" opacity="0.6">
+        <path d="M26 10 L6 4 L6 16 Z"/>
+        <path d="M38 10 L58 4 L58 16 Z"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-icon" aria-hidden="true"><use href="#icon-lighthouse"/></svg>
+      <span class="brand-name">TIDEBREAK</span>
+    </div>
+    <div class="round-badge" id="round-badge">ROUND 1</div>
+    <div class="top-actions">
+      <button id="sound-btn" type="button">SOUND: ON</button>
+      <button id="restart-btn" type="button">RESTART</button>
+    </div>
+  </header>
+
+  <main class="table">
+    <section class="opponent-row" aria-label="Opponent">
+      <div class="keeper opponent">
+        <div class="avatar avatar-foe"><svg aria-hidden="true"><use href="#icon-lighthouse"/></svg></div>
+        <div class="keeper-info">
+          <div class="keeper-name">STORMKEEPER <span class="keeper-title">Rival Keeper</span></div>
+          <div class="life" id="ai-life"></div>
+        </div>
+      </div>
+      <div class="hand opponent-hand" id="ai-hand" aria-label="Stormkeeper's hand"></div>
+    </section>
+
+    <section class="center-row">
+      <div class="tide" id="tide-meter" aria-label="Tide meter"></div>
+      <div class="played" id="played-zone">
+        <div class="played-slot" id="player-played"></div>
+        <div class="vs">VS</div>
+        <div class="played-slot" id="ai-played"></div>
+      </div>
+      <div class="banner" id="banner"></div>
+    </section>
+
+    <section class="player-row" aria-label="Your hand">
+      <div class="keeper player">
+        <div class="avatar avatar-you"><svg aria-hidden="true"><use href="#icon-lighthouse"/></svg></div>
+        <div class="keeper-info">
+          <div class="keeper-name">YOU <span class="keeper-title">Harbor Keeper</span></div>
+          <div class="life" id="player-life"></div>
+        </div>
+      </div>
+      <div class="hand player-hand" id="player-hand" aria-label="Your hand"></div>
+      <div class="hint" id="hint">Click a card — or press 1–5 — to play it.</div>
+    </section>
+  </main>
+
+  <footer class="logbar" id="log" aria-label="Duel log"></footer>
+</div>
+
+<div class="overlay" id="title-screen">
+  <div class="title-box">
+    <svg class="title-icon" aria-hidden="true"><use href="#icon-lighthouse"/></svg>
+    <h1 class="title-name">TIDEBREAK</h1>
+    <p class="title-sub">A duel of two lighthouse keepers over a stormy strait.</p>
+    <div class="title-rules">
+      <div class="rule"><span class="rule-num">1</span> Each round, play one card. Higher total wins the trick.</div>
+      <div class="rule"><span class="rule-num">2</span> A card matching the <b>tide</b> counts <b>double</b>. The tide turns every round.</div>
+      <div class="rule"><span class="rule-num">3</span> The loser takes the difference as damage. First to 0 life loses.</div>
+      <div class="rule"><span class="rule-num">4</span> <b>Storm Surge</b> adds +3. <b>Anchor</b> blocks all damage that round.</div>
+    </div>
+    <button class="big-button" id="start-btn" type="button">Light the lamp — Play</button>
+    <p class="title-foot">20 life each · deck of 40 · mouse or keys 1–5</p>
+  </div>
+</div>
+
+<div class="overlay hidden" id="end-screen"></div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
